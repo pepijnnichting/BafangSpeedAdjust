@@ -24,3 +24,9 @@ If all is connected correctly, you should see a lot of data passing by in the se
 If you wait 10 seconds (set in code), the speed will be set to 35km/h
 
 !!! USE AT OWN RISK !!!
+
+
+
+usefull:
+
+https://endless-sphere.com/sphere/threads/bafang-m500-m600-thread.100777/page-53
