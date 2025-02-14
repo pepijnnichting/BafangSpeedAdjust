@@ -20,6 +20,12 @@ void sendSpeed(int speedKmH) {
   CAN.endPacket();
 }
 
+void printRepeatedMessage(const char* message, int count) {
+  for (int i = 0; i < count; i++) {
+    Serial.println(message);
+  }
+}
+
 void setup() {
   Serial.begin(esp32BaudRate);
   
@@ -60,24 +66,12 @@ void loop() {
   }
 
   //Write speed setting after 10 seconds waiting
-  if(!speedSet && currentMillis > 10000){
+  if(!logOnlyMode && !speedSet && currentMillis > 10000){
     speedSet = true;
-    Serial.println("------ WRITING SPEED ------");
-    Serial.println("------ WRITING SPEED ------");
-    Serial.println("------ WRITING SPEED ------");
-    Serial.println("------ WRITING SPEED ------");
-    Serial.println("------ WRITING SPEED ------");
-    Serial.println("------ WRITING SPEED ------");
+    printRepeatedMessage("------ WRITING SPEED ------", 6);
 
-    if (!logOnlyMode) {
-      sendSpeed(speedKmH);
-    }
+    sendSpeed(speedKmH);
 
-    Serial.println("----------- DONE ----------");
-    Serial.println("----------- DONE ----------");
-    Serial.println("----------- DONE ----------");
-    Serial.println("----------- DONE ----------");
-    Serial.println("----------- DONE ----------");
-    Serial.println("----------- DONE ----------");
+    printRepeatedMessage("----------- DONE ----------", 6);
   }
 }
