@@ -1,32 +1,79 @@
-# BafangSpeedAdjust
+# Bafang Speed Adjust
 
-Simple speed adjustment for my bafang motor using CAN BUS on my Veloretti ace
+Simple speed adjustment for my my Veloretti ace two.
+This Arduino project adjusts the speed setting of a Bafang motor controller using an ESP32 and CAN bus communication.
 
-What do you need:
+## Hardware Requirements
 
-- Arduino Nano = <5 euro
-- [MCP 2515 CAN module](https://www.amazon.nl/gp/product/B07MY2D7TW/) = 7 euro
-- [Bafang 6 pin brake cable (Female)](https://www.aliexpress.com/item/1005004128109927.html) = 9 euro or [here](https://a.aliexpress.com/_EIiGmyn) = 5.57
+- ESP32 development board
+- [Bafang 6 pin brake cable (Female)](https://nl.aliexpress.com/item/1005006053143927.html) = 3,5 euro
+- transceiver module (Mcp2551, SN65HVD230 or TJA1050)
 
-Connect MCP 2515 and arduino like shown [here](https://github.com/autowp/arduino-mcp2515) (no need for power converter, power comes over usb to the arduino and can module):
+## Software Requirements
 
-Connect the brake cable to the MCP 2515 module (H = green cable, L= white cable)
+- Arduino IDE
+- ESP32 board support package
+- `CAN` library for Arduino
 
-Download the [MCP 2515 arduino library](https://github.com/autowp/arduino-mcp2515) and add to the arduino ide as described
+## Installation
 
-Copy code demo in ino file (try reading without writing the speed setting check if read code starts with 82F83203, first characters could be different)
+1. **Clone the repository:**
 
-Remove plastic cover from motor with 3 torx screws
-Connect the cable to the bafang motor (purple connector, bike can be switched on)
-And plug the arduino with an usb cable into a computer or smartphone (If you want to read the serial output, if you don't want to read the output and just write the new setting a powerbank is fine. I use the app serial monitor on android, adjust the baudrate to 115200)
-If all is connected correctly, you should see a lot of data passing by in the serial monitor.
+   ```sh
+   git clone https://github.com/yourusername/BafangSpeedAdjust.git
+   ```
 
-If you wait 10 seconds (set in code), the speed will be set to 35km/h
+2. **Open the project in Arduino IDE:**
 
-!!! USE AT OWN RISK !!!
+   Open the `BafangSpeedAdjust_esp32.ino` file located in the `BafangSpeedAdjust/BafangSpeedAdjust` directory.
+
+3. **Install the required libraries:**
+
+   In the Arduino IDE, go to `Sketch` > `Include Library` > `Manage Libraries...` and install the `CAN` library.
+
+4. **Select the ESP32 board:**
+
+   In the Arduino IDE, go to `Tools` > `Board` and select your ESP32 board.
+
+5. **Upload the code:**
+
+   Connect your ESP32 board to your computer and upload the code.
+
+## Configuration
+
+The following constants can be configured in the `BafangSpeedAdjust_esp32.ino` file:
+
+- `canBaudRate`: The baud rate for the CAN bus communication (default: `250E3`).
+- `esp32BaudRate`: The baud rate for the ESP32 serial communication (default: `115200`).
+- `speedKmH`: The speed setting in km/h (default: `35`).
+- `canId`: The CAN ID for the Bafang motor controller (default: `0x85103203`).
+- `logOnlyMode`: Set to `true` for log-only mode, which will not send the speed setting (default: `true`).
+
+## Usage
+
+1. **Connect the hardware:**
+
+   - Connect the CAN transceiver module to the ESP32.
+   - Connect the 6 pin cable to the CAN transceiver module (H = green cable, L= white cable)
+   - Connect the 6 pin cable to the Bafang motor controller (purple connector, bike can be switched on)
+   - Connect the ESP32 to your computer using a USB cable.
+   - If all is connected correctly, you should see a lot of data passing by in the serial monitor.
 
 
+2. **Power on the system:**
 
-usefull:
+   Ensure that the ESP32 and the Bafang motor controller are powered on.
 
+3. **Monitor the serial output:**
+
+   Open the Serial Monitor in the Arduino IDE to view the output. The speed setting will be sent after a 10-second delay if `logOnlyMode` is set to `false`.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- [ESP32](https://www.espressif.com/)
+- [Bafang](https://www.bafang-e.com/)
 https://endless-sphere.com/sphere/threads/bafang-m500-m600-thread.100777/page-53
