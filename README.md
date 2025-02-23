@@ -1,13 +1,13 @@
 # Bafang Speed Adjust
 
-Simple speed adjustment for my my Veloretti ace two.
+Simple speed adjustment for my Veloretti ace two.
 This Arduino project adjusts the speed setting of a Bafang motor controller using an ESP32 and CAN bus communication.
 
 ## Hardware Requirements
 
 - ESP32 development board
 - [Bafang 6 pin brake cable (Female)](https://nl.aliexpress.com/item/1005006053143927.html) = 3,5 euro
-- transceiver module (Mcp2551, SN65HVD230 or TJA1050)
+- CAN transceiver module (Mcp2551, SN65HVD230, or TJA1050)
 
 ## Software Requirements
 
@@ -48,17 +48,18 @@ The following constants can be configured in the `BafangSpeedAdjust_esp32.ino` f
 - `speedKmH`: The speed setting in km/h (default: `35`).
 - `canId`: The CAN ID for the Bafang motor controller (default: `0x85103203`).
 - `logOnlyMode`: Set to `true` for log-only mode, which will not send the speed setting (default: `true`).
+- `CAN_TX_PIN`: The TX pin for the CAN communication (default: `5`).
+- `CAN_RX_PIN`: The RX pin for the CAN communication (default: `4`).
 
 ## Usage
 
 1. **Connect the hardware:**
 
    - Connect the CAN transceiver module to the ESP32.
-   - Connect the 6 pin cable to the CAN transceiver module (H = green cable, L= white cable)
-   - Connect the 6 pin cable to the Bafang motor controller (purple connector, bike can be switched on)
+   - Connect the 6 pin cable to the CAN transceiver module (H = green cable, L = white cable).
+   - Connect the 6 pin cable to the Bafang motor controller (purple connector, bike can be switched on).
    - Connect the ESP32 to your computer using a USB cable.
    - If all is connected correctly, you should see a lot of data passing by in the serial monitor.
-
 
 2. **Power on the system:**
 
@@ -68,6 +69,12 @@ The following constants can be configured in the `BafangSpeedAdjust_esp32.ino` f
 
    Open the Serial Monitor in the Arduino IDE to view the output. The speed setting will be sent after a 10-second delay if `logOnlyMode` is set to `false`.
 
+## Troubleshooting
+
+- **CAN communication failed:** Ensure that the CAN transceiver module is properly connected to the ESP32 and that the correct pins are set in the code.
+- **No data in Serial Monitor:** Check the baud rate settings in the Serial Monitor and ensure they match the `esp32BaudRate` in the code.
+- **Speed setting not applied:** Ensure that `logOnlyMode` is set to `false` and that the `speedKmH` and `canId` values are correct.
+
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
@@ -76,4 +83,4 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 - [ESP32](https://www.espressif.com/)
 - [Bafang](https://www.bafang-e.com/)
-https://endless-sphere.com/sphere/threads/bafang-m500-m600-thread.100777/page-53
+- [Endless Sphere Forum](https://endless-sphere.com/sphere/threads/bafang-m500-m600-thread.100777/page-53)

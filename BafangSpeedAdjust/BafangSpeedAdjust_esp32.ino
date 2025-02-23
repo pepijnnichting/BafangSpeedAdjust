@@ -6,6 +6,8 @@ const long esp32BaudRate = 115200;
 const int speedKmH = 35; // Speed in km/h
 const long canId = 0x85103203; // CAN ID
 const bool logOnlyMode = true; // Set to true for log-only mode
+const int CAN_TX_PIN = 5; // Set your CAN TX pin
+const int CAN_RX_PIN = 4; // Set your CAN RX pin
 
 void sendSpeed(int speedKmH) {
   int speed = speedKmH * 100; // Convert km/h to the required format
@@ -25,25 +27,17 @@ void printRepeatedMessage(const char* message, int count) {
   }
 }
 
-void setup() {
-  Serial.begin(esp32BaudRate);
-  
+void initializeCAN() {
+  // Set CAN pins
+  CAN.setPins(CAN_TX_PIN, CAN_RX_PIN);
+
   if (!CAN.begin(canBaudRate)) {
     Serial.println("Starting CAN failed!");
     while (1);
   }
-
-  Serial.println("Setup ok");
-  Serial.println();
-
-  if (!logOnlyMode) {
-    sendSpeed(speedKmH);
-  }
 }
 
-void loop() {
-  unsigned long currentMillis = millis();
-  
+void handleCANPacket() {
   int packetSize = CAN.parsePacket();
   if (packetSize) {
     if (CAN.packetExtended()) {
@@ -63,9 +57,28 @@ void loop() {
     }
     Serial.println();
   }
+}
 
-  //Write speed setting after 10 seconds waiting
-  if(!logOnlyMode && !speedSet && currentMillis > 10000){
+void setup() {
+  Serial.begin(esp32BaudRate);
+  
+  initializeCAN();
+
+  Serial.println("Setup ok");
+  Serial.println();
+
+  if (!logOnlyMode) {
+    sendSpeed(speedKmH);
+  }
+}
+
+void loop() {
+  unsigned long currentMillis = millis();
+  
+  handleCANPacket();
+
+  // Write speed setting after 10 seconds waiting
+  if (!logOnlyMode && !speedSet && currentMillis > 10000) {
     speedSet = true;
     printRepeatedMessage("------ WRITING SPEED ------", 6);
 
