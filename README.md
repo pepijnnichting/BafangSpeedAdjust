@@ -84,3 +84,12 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 - [ESP32](https://www.espressif.com/)
 - [Bafang](https://www.bafang-e.com/)
 - [Endless Sphere Forum](https://endless-sphere.com/sphere/threads/bafang-m500-m600-thread.100777/page-53)
+
+
+## FYI
+
+The first 2 groups are representing the speed limit, the next 2 groups are representing the wheel size and the last one the perimeter of the wheel. (Casainho helped me understand that in his well comented code https://github.com/OpenSourceEBike/EV_Display_Bluetooth_Ant/blob/main/firmware/display/can.c)
+
+Original read: 82F83203 6 C4 09 C0 2B CE 08 => C4 09 => 09C4 => 2500 => 25km/h
+Set:           85103203 6 AC 0D C0 2B CE 08 => AC 0D => 0DAC => 3500 => 35km/h
+New read:      82F83203 6 AC 0D C0 2B CE 08
