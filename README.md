@@ -45,13 +45,13 @@ The following constants can be configured in the `BafangSpeedAdjust_esp32.ino` f
 
 - `canBaudRate`: The baud rate for the CAN bus communication (default: `250E3`).
 - `esp32BaudRate`: The baud rate for the ESP32 serial communication (default: `115200`).
-- `speedLimit`: The speed setting in km/h (default: `35`).
 - `canId`: The CAN ID for the Bafang motor controller (default: `0x85103203`).
+- `speedLimit`: The speed setting in km/h (default: `35`).
+- `wheelSize`: The wheel size in mm (default: `2100`).
+- `wheelPerimeter`: The wheel perimeter in mm (default: `2100`).
 - `logOnlyMode`: Set to `true` for log-only mode, which will not send the speed setting (default: `true`).
 - `CAN_TX_PIN`: The TX pin for the CAN communication (default: `5`).
 - `CAN_RX_PIN`: The RX pin for the CAN communication (default: `4`).
-- `wheelSize`: The wheel size in mm (default: `2100`).
-- `wheelPerimeter`: The wheel perimeter in mm (default: `2100`).
 
 ## Usage
 

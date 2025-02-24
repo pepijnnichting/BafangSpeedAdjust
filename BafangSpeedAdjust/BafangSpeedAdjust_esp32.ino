@@ -8,9 +8,14 @@ const int speedLimit = 35; // Speed limit in km/h
 const int wheelSize = 11040; // Wheel size in mm (calculated to match 0xC0 and 0x2B)
 const int wheelPerimeter = 2254; // Wheel perimeter in mm (calculated to match 0xCE and 0x08)
 const bool logOnlyMode = true; // Set to true for log-only mode
+const int CAN_TX_PIN = 5; // Set your CAN TX pin
+const int CAN_RX_PIN = 4; // Set your CAN RX pin
 
 void writeToCan(int speedLimit, int wheelSize, int wheelPerimeter) {
   int speed = speedLimit * 100; // Convert km/h to the required format
+  uint32_t temp_wheel_size = (wheelSize / 10) & 0x0F;
+  temp_wheel_size = temp_wheel_size << 4;
+  temp_wheel_size += (wheelSize % 10);
 
   CAN.beginExtendedPacket(canId);
   CAN.write((speed >> 8) & 0xFF); // Speed limit high byte
@@ -31,6 +36,9 @@ void printRepeatedMessage(const char* message, int count) {
 void setup() {
   Serial.begin(esp32BaudRate);
   
+  // Set CAN pins
+  CAN.setPins(CAN_TX_PIN, CAN_RX_PIN);
+
   if (!CAN.begin(canBaudRate)) {
     Serial.println("Starting CAN failed!");
     while (1);
