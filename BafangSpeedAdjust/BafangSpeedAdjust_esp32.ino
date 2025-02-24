@@ -73,6 +73,31 @@ void loop() {
       Serial.print(CAN.read(), HEX);
     }
     Serial.println();
+
+    // Print human-readable data if packetid ends with 0x3203
+    if (packetSize >= 6 && (CAN.packetId() & 0xFFFF) == 0x3203) {
+      CAN.beginPacket();
+      int speedHigh = CAN.read();
+      int speedLow = CAN.read();
+      int speed = (speedHigh << 8) | speedLow;
+      Serial.print("Speed Limit: ");
+      Serial.print(speed / 100.0);
+      Serial.println(" km/h");
+
+      int wheelSizeLow = CAN.read();
+      int wheelSizeHigh = CAN.read();
+      int wheelSize = ((wheelSizeHigh & 0x0F) << 4) | (wheelSizeLow & 0x0F);
+      Serial.print("Wheel Size: ");
+      Serial.print(wheelSize * 10);
+      Serial.println(" mm");
+
+      int wheelPerimeterLow = CAN.read();
+      int wheelPerimeterHigh = CAN.read();
+      int wheelPerimeter = (wheelPerimeterHigh << 8) | wheelPerimeterLow;
+      Serial.print("Wheel Perimeter: ");
+      Serial.print(wheelPerimeter);
+      Serial.println(" mm");
+    }
   }
 
   // Write speed setting after 10 seconds waiting
