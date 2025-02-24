@@ -45,11 +45,13 @@ The following constants can be configured in the `BafangSpeedAdjust_esp32.ino` f
 
 - `canBaudRate`: The baud rate for the CAN bus communication (default: `250E3`).
 - `esp32BaudRate`: The baud rate for the ESP32 serial communication (default: `115200`).
-- `speedKmH`: The speed setting in km/h (default: `35`).
+- `speedLimit`: The speed setting in km/h (default: `35`).
 - `canId`: The CAN ID for the Bafang motor controller (default: `0x85103203`).
 - `logOnlyMode`: Set to `true` for log-only mode, which will not send the speed setting (default: `true`).
 - `CAN_TX_PIN`: The TX pin for the CAN communication (default: `5`).
 - `CAN_RX_PIN`: The RX pin for the CAN communication (default: `4`).
+- `wheelSize`: The wheel size in mm (default: `2100`).
+- `wheelPerimeter`: The wheel perimeter in mm (default: `2100`).
 
 ## Usage
 
@@ -69,11 +71,18 @@ The following constants can be configured in the `BafangSpeedAdjust_esp32.ino` f
 
    Open the Serial Monitor in the Arduino IDE to view the output. The speed setting will be sent after a 10-second delay if `logOnlyMode` is set to `false`.
 
+4. **Set wheel size and speed limit:**
+
+   The wheel size and speed limit can be set using the `writeToCan` function in the code. For example:
+   ```cpp
+   writeToCan(35, 2100, 2100); // Set speed limit to 35 km/h, wheel size to 2100 mm, and wheel perimeter to 2100 mm
+   ```
+
 ## Troubleshooting
 
 - **CAN communication failed:** Ensure that the CAN transceiver module is properly connected to the ESP32 and that the correct pins are set in the code.
 - **No data in Serial Monitor:** Check the baud rate settings in the Serial Monitor and ensure they match the `esp32BaudRate` in the code.
-- **Speed setting not applied:** Ensure that `logOnlyMode` is set to `false` and that the `speedKmH` and `canId` values are correct.
+- **Speed setting not applied:** Ensure that `logOnlyMode` is set to `false` and that the `speedLimit`, `wheelSize`, and `canId` values are correct.
 
 ## License
 
@@ -88,7 +97,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## FYI
 
-The first 2 groups are representing the speed limit, the next 2 groups are representing the wheel size and the last one the perimeter of the wheel. (Casainho helped me understand that in his well comented code https://github.com/OpenSourceEBike/EV_Display_Bluetooth_Ant/blob/main/firmware/display/can.c)
+The first 2 groups are representing the speed limit, the next 2 groups are representing the wheel size and the last one the perimeter of the wheel. (Casainho helped me understand that in his well commented code https://github.com/OpenSourceEBike/EV_Display_Bluetooth_Ant/blob/main/firmware/display/can.c)
 
 Original read: 82F83203 6 C4 09 C0 2B CE 08 => C4 09 => 09C4 => 2500 => 25km/h
 Set:           85103203 6 AC 0D C0 2B CE 08 => AC 0D => 0DAC => 3500 => 35km/h

@@ -3,19 +3,22 @@
 bool speedSet = false;
 const long canBaudRate = 250E3;
 const long esp32BaudRate = 115200;
-const int speedLimit = 35; // speed limit in km/h
 const long canId = 0x85103203; // CAN ID
+const int speedLimit = 35; // Speed limit in km/h
+const int wheelSize = 11040; // Wheel size in mm (calculated to match 0xC0 and 0x2B)
+const int wheelPerimeter = 2254; // Wheel perimeter in mm (calculated to match 0xCE and 0x08)
 const bool logOnlyMode = true; // Set to true for log-only mode
 
-void writeToCan(int speedLimit) {
+void writeToCan(int speedLimit, int wheelSize, int wheelPerimeter) {
   int speed = speedLimit * 100; // Convert km/h to the required format
+
   CAN.beginExtendedPacket(canId);
-  CAN.write((speed >> 8) & 0xFF); // Speed limit High byte
-  CAN.write(speed & 0xFF);        // Speed limit Low byte
-  CAN.write(0xC0); //wheel size
-  CAN.write(0x2B); //wheel size
-  CAN.write(0xCE); //wheel perimeter
-  CAN.write(0x08); //wheel perimeter
+  CAN.write((speed >> 8) & 0xFF); // Speed limit high byte
+  CAN.write(speed & 0xFF);        // Speed limit low byte
+  CAN.write(temp_wheel_size);     // Wheel size low byte
+  CAN.write((wheelSize >> 8) & 0xFF); // Wheel size high byte
+  CAN.write(wheelPerimeter & 0xFF);   // Wheel perimeter low byte
+  CAN.write((wheelPerimeter >> 8) & 0xFF); // Wheel perimeter high byte
   CAN.endPacket();
 }
 
@@ -37,7 +40,7 @@ void setup() {
   Serial.println();
 
   if (!logOnlyMode) {
-    writeToCan(speedLimit);
+    writeToCan(speedLimit, wheelSize, wheelPerimeter);
   }
 }
 
@@ -64,12 +67,12 @@ void loop() {
     Serial.println();
   }
 
-  //Write speed setting after 10 seconds waiting
-  if(!logOnlyMode && !speedSet && currentMillis > 10000){
+  // Write speed setting after 10 seconds waiting
+  if (!logOnlyMode && !speedSet && currentMillis > 10000) {
     speedSet = true;
     printRepeatedMessage("------ WRITING SPEED ------", 6);
 
-    writeToCan(speedLimit);
+    writeToCan(speedLimit, wheelSize, wheelPerimeter);
 
     printRepeatedMessage("----------- DONE ----------", 6);
   }
